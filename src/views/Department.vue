@@ -90,7 +90,7 @@ export default {
         window.location.href="https://www.wjx.top/m/60141438.aspx";
     },
     handleBack() {
-        this.$router.push({ path: '/home' });
+        this.$emit('change-routes', { view: 'home'})
     }
   }
 };

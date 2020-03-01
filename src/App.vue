@@ -1,7 +1,9 @@
 <template>
-  <div id="app">
+  <div id="app" @change-routes="changeRoutes">
     <transition mode="out-in" >
-      <router-view />
+      <view-loading v-if="view==='loading'" />
+      <view-home v-else-if="view==='home'" />
+      <view-department v-else-if="view==='department'" :dep="dep" :nickname="nickname"/>
     </transition>
   </div>
 </template>

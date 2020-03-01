@@ -66,7 +66,7 @@ export default {
   watch: {
       percent: function(newVal) {
           if (newVal === 100) {
-              setTimeout(()=>{this.$router.push({ path: '/home' });}, 500);
+              setTimeout(()=>{this.$emit('change-routes', { view: 'home' })}, 500);
           }
       }
   }

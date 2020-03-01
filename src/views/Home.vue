@@ -45,7 +45,7 @@ export default {
       let deps = ['ad', 'eb', 'linb', 'op', 'pi', 'pr', 'tsi', 'yamp'];
       let dep = deps[Math.floor(Math.random() * deps.length)];
 
-      this.$router.push({ path: `/department/${dep}/${this.nickname || '小明'}` });
+      this.$emit('change-routes', { view: 'department', dep: dep, nickname: this.nickname || '小明'});
     }
     
   }
