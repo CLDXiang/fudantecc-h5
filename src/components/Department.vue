@@ -1,22 +1,25 @@
 <template>
-  <div class="dppage" @touchend="handleTouchEnd">
+  <div class="dppage">
     <div class="dppageone" :class="[this.dpname + '1']">
       <div class="congratulation-box">
         <div class="congratulation">天呐！{{ nickname }}</div>
-        <div class="congratulation">
+        <div class="congratulation" style="white-space:nowrap">
           你<span class="pink">命中注定</span>的部门就是
         </div>
       </div>
+      <div class="icon-box">
+      <a-icon type="down-circle" class="down-icon animated infinite pulse" theme="twoTone" twoToneColor="#84a22a"/>
+      </div>
     </div>
     <div class="dppagetwo" :class="[this.dpname + '2']">
-      <div class="btn-box btn-box-out" @touchend="handleOut">
+      <div v-show="showBtn" class="btn-box btn-box-out animated infinite pulse" @touchend.stop="handleOut">
         <div class="little">心动不如行动！</div>
         <div class="outbtn fake"></div>
         <div class="outbtn">
           点我马上填写报名问卷
         </div>
       </div>
-      <div class="btn-box btn-box-back" @touchend="handleBack">
+      <div v-show="showBtn" class="btn-box btn-box-back" @touchend.stop="handleBack">
         <div class="backbtn fake"></div>
         <div class="backbtn">
           我不服，再测一次！
@@ -29,68 +32,97 @@
 <script>
 export default {
   name: "Department",
-  props: ["dpname", "nickname"],
+  props: ["dpname", "nickname", "view"],
   data: function() {
     return {
-      page: 1
+      page: 1,
+      showBtn: true,
+      ticker: undefined
     };
   },
+  mounted: function() {
+    this.showBtn = true;
+  },
+  updated: function() {
+    if (this.showBtn) {
+      window.scrollTo(0, 0);
+    }
+    if (this.showBtn === false && this.view === 'department') {
+      this.showBtn = true;
+    } 
+  },
   methods: {
-    scrollAnimation(targetY) {
-      // 获取当前位置方法
-      // const currentY = document.documentElement.scrollTop || document.body.scrollTop
-      let currentY =
-        window.pageYOffset ||
-        document.body.scrollTop ||
-        document.documentElement.scrollTop;
-      // 计算需要移动的距离
-      let needScrollTop = targetY - currentY;
-      setTimeout(() => {
-        // 一次调用滑动帧数，每次调用会不一样
-        const dist = Math.ceil(needScrollTop / 10);
-        window.scrollTo(0, currentY + dist);
-        // 如果移动幅度小于十个像素，直接移动，否则递归调用，实现动画效果
-        if (needScrollTop > 10 || needScrollTop < -10) {
-          this.scrollAnimation(targetY);
-        } else {
-          window.scrollTo(0, targetY);
-        }
-      }, 1);
-    },
-    handleTouchEnd() {
-        console.log('touchend!');
-      let scrollTop =
-        window.pageYOffset ||
-        document.body.scrollTop ||
-        document.documentElement.scrollTop;
-      let clientHeight =
-        document.body.clientHeight || document.documentElement.clientHeight;
-      const thre = 0.15;
-      if (this.page === 1 && scrollTop > 0 && scrollTop < clientHeight * thre) {
-        // 回滚
-        //   window.scrollTo(0, 0);
-        this.scrollAnimation(0);
-      } else if (this.page === 1 && scrollTop === 0) {
-          return;
-      } else if (this.page === 1) {
-        this.scrollAnimation(clientHeight);
-        //   window.scrollTo(0, clientHeight);
-        this.page = 2;
-      } else if (this.page === 2 && scrollTop < clientHeight * (1 - thre)) {
-        //   window.scrollTo(0, 0);
-        this.scrollAnimation(0);
+    // scrollAnimation(targetY) {
+    //   // 获取当前位置方法
+    //   // const currentY = document.documentElement.scrollTop || document.body.scrollTop
+    //   let currentY =
+    //     window.pageYOffset ||
+    //     document.body.scrollTop ||
+    //     document.documentElement.scrollTop;
+    //   // console.log(currentY);
+    //   // 计算需要移动的距离
+    //   let needScrollTop = targetY - currentY;
+    //   setTimeout(() => {
+    //     // 一次调用滑动帧数，每次调用会不一样
+    //     const dist = Math.ceil(needScrollTop / 10);
+    //     window.scrollTo(0, currentY + dist);
+    //     // 如果移动幅度小于十个像素，直接移动，否则递归调用，实现动画效果
+    //     if (needScrollTop > 10 || needScrollTop < -10) {
+    //       this.scrollAnimation(targetY);
+    //     } else {
+    //       window.scrollTo(0, 2 * targetY);
+    //     }
+    //   }, 1);
+    // },
+    // handleTouchEnd() {
+    //   let scrollTop =
+    //     window.pageYOffset ||
+    //     document.body.scrollTop ||
+    //     document.documentElement.scrollTop;
+    //   let clientHeight =
+    //     document.body.clientHeight || document.documentElement.clientHeight;
+    //   const thre = 0.08;
+    //   if (this.page === 1 && scrollTop > 0 && scrollTop < clientHeight * thre) {
+    //     // 回滚
+    //     //   window.scrollTo(0, 0);
+    //     this.scrollAnimation(0);
+    //     console.log('aaa');
+    //   } else if (this.page === 1 && scrollTop === 0) {
+    //     console.log('bbb');
+    //       return;
+    //   } else if (this.page === 1) {
+    //     console.log('ccc');
+    //     this.scrollAnimation(clientHeight);
+    //     //   window.scrollTo(0, clientHeight);
+    //     this.page = 2;
+    //   } else if (this.page === 2 && scrollTop < clientHeight * (1 - thre)) {
+    //     //   window.scrollTo(0, 0);
+    //     console.log('ddd');
+    //     this.scrollAnimation(0);
 
-        this.page = 1;
-      } else {
-        //   window.scrollTo(0, clientHeight);
-        this.scrollAnimation(clientHeight);
-      }
-    },
+    //     this.page = 1;
+    //   } else {
+    //     console.log('eee');
+    //     //   window.scrollTo(0, clientHeight);
+    //     this.scrollAnimation(clientHeight);
+    //   }
+    // },
     handleOut() {
         window.location.href="https://www.wjx.top/m/60141438.aspx";
     },
     handleBack() {
-        this.$emit('change-routes', { view: 'home'})
+        if (this.ticker) {
+          clearTimeout(this.ticker);
+          this.ticker = undefined;
+        }
+        this.page = 1;
+        this.showBtn = false;
+        this.$emit('change-routes', { view: 'home', nickname: this.nickname })
+        this.ticker = setTimeout(()=>{
+          if (this.showBtn === false && this.view === 'department') {
+            this.showBtn = true;
+          } 
+        }, 2000);
     }
   }
 };
@@ -102,6 +134,7 @@ export default {
   height: 200%;
   background: white no-repeat center top;
   background-size: auto 50%;
+  transition: all 0.5s ease-out 0s;
 }
 
 .dppageone {
@@ -116,6 +149,17 @@ export default {
   height: 50%;
   background: white no-repeat center bottom;
   background-size: auto 100%;
+}
+
+.icon-box {
+  position: absolute;
+  top: 92%;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.down-icon {
+  font-size: 1.5rem;
 }
 
 
@@ -146,7 +190,7 @@ export default {
   transform: translate(50%, 0);
 
   white-space: nowrap;
-  font-size: 4pt;
+  font-size: 6pt;
   font-weight: bold;
   letter-spacing: 2px;
 }
@@ -260,14 +304,16 @@ export default {
   left: 50%;
   top: 45%;
   transform: translate(-50%, -50%);
+  max-height: 16%;
 }
 
 .congratulation,
 .pink {
-  font-size: 10pt;
+  font-size: 1.1rem;
   font-weight: bold;
   letter-spacing: 2px;
   color: white;
+  transition: all 2s ease-out 0s;
 }
 
 .congratulation {

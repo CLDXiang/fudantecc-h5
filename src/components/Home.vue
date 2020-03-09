@@ -1,14 +1,20 @@
 <template>
-    <div class="homepage" @touchend="handleTouch" :class="page">
+<transition-group name="pic" >
+    <div v-show="page==='pic1'" class="homepage pic1" @touchend="handleTouch" key='pic1'>
+    </div>
+    <div v-show="page==='pic2'" class="homepage pic2" @touchend="handleTouch" key='pic2'>
+    </div>
+    <div v-show="page==='pic3'" class="homepage pic3" @touchend="handleTouch" key='pic3'>
       <div v-show="page==='pic3'" class="input-box">
         <span class="input-title">请输入你的昵称</span>
         <a-input class="input-text" placeholder="小明" v-model="nickname" @change="handleInput" pressEnter="handleGo"/>
       </div>
-      <div v-show="page==='pic3'" class="btn-box" @touchend="handleGo">
+      <div v-show="page==='pic3'" class="btn-box animated infinite pulse" @touchend="handleGo">
         <div class="gobtn fake"></div>
         <div class="gobtn"><img class="img" src="/img/go.png" /></div>
       </div>
     </div>
+</transition-group>
 </template>
 
 <script>
@@ -17,11 +23,13 @@ export default {
   data: function() {
     return {
       page: 'pic1',
-      nickname: ''
+      nickname: this.nick || ''
     }
   },
+  props: ['nick'],
   methods: {
     handleTouch: function() {
+      console.log(this.page)
       switch (this.page) {
         case 'pic1':
           this.page = 'pic2';
@@ -36,8 +44,8 @@ export default {
       }
     },
     handleInput: function(e) {
-      if (e.target.value.length > 20) {
-        this.nickname = e.target.value.substr(0, 20);
+      if (e.target.value.length > 15) {
+        this.nickname = e.target.value.substr(0, 15);
       }
     },
     handleGo: function() {
@@ -58,7 +66,7 @@ export default {
     height: 100%;
     background: white no-repeat center top;
     background-size: auto 100%;
-    transition: background 0.5s ease-out 0s;
+    /* transition: background 2s ease-out 0s; */
 }
 
 .pic1 {
@@ -146,6 +154,19 @@ export default {
 
 .img {
   height: 16px;
+}
+
+
+.pic-enter, .pic-leave-to {
+  opacity: 0;
+}
+
+.pic-enter-to {
+  opacity: 1;
+}
+
+.pic-enter-active {
+  transition: opacity 2s;
 }
 
 </style>
