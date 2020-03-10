@@ -18,5 +18,5 @@ yarn serve
 发布：
 
 ```sh
-yarn install
+yarn build
 ```
